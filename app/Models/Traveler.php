@@ -20,4 +20,9 @@ class Traveler extends Model
         'gender',
         'date_of_birth',
     ];
+
+     public function paymentInfo()
+    {
+        return $this->hasOne(PaymentInfo::class);
+    }
 }
