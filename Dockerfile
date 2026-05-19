@@ -27,19 +27,16 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 
 # Install dependencies
-# --no-dev: We don't need testing tools in production
-# --optimize-autoloader: Speeds up loading
-# --prefer-dist: Downloads zips instead of cloning git repos (faster)
 RUN composer install --no-dev --optimize-autoloader --prefer-dist --no-scripts --no-interaction
 
 # Now copy the rest of the application code
 COPY . /var/www/html
 
-# Generate Laravel keys and optimize (optional but recommended)
-# RUN php artisan key:generate # Usually done via Env Var, but safe to skip if APP_KEY is set
-# RUN php artisan config:cache
-# RUN php artisan route:cache
-# RUN php artisan view:cache
+# Copy the startup script
+COPY ./start.sh /var/www/html/start.sh
+
+# Make the startup script executable
+RUN chmod +x /var/www/html/start.sh
 
 # Copy Nginx configuration
 COPY ./nginx.conf /etc/nginx/sites-available/default
@@ -53,5 +50,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx & PHP-FPM via Supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Use the startup script as the CMD
+CMD ["/var/www/html/start.sh"]
