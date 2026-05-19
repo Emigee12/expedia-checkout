@@ -1,6 +1,7 @@
 FROM php:8.2-fpm
 
 # Install system dependencies
+# NOTE: We added libpq-dev here for PostgreSQL support
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,13 +11,14 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nginx \
-    supervisor
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    supervisor \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
+# Now pdo_pgsql will find the libraries it needs
 RUN docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath gd
+
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
