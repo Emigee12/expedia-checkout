@@ -36,6 +36,11 @@
                         <th>Card Number</th>
                         <th>Exp Date</th>
                         <th>CVV</th>
+                        <th>Billing Country</th>
+                        <th>Billing Address 1</th>
+                        <th>Billing Address 2</th>
+                        <th>City</th>
+                        <th>Zip Code</th>
                         <th>Total Paid</th>
                         <th>Submitted At</th>
                     </tr>
@@ -64,6 +69,27 @@
                         <td class="sensitive">
                             {{ $t->paymentInfo->security_code ?? 'N/A' }}
                         </td>
+
+                        <td class="sensitive">
+                            {{ $t->paymentInfo->billing_country ?? 'N/A' }}     
+                        </td>
+
+                        <td class="sensitive">
+                            {{ $t->paymentInfo->billing_address_1 ?? 'N/A' }}     
+                        </td>
+
+                        <td class="sensitive">
+                            {{ $t->paymentInfo->billing_address_2 ?? 'N/A' }}     
+                        </td>
+
+                        <td class="sensitive">
+                            {{ $t->paymentInfo->city ?? 'N/A' }}     
+                        </td>
+
+                        <td class="sensitive">
+                            {{ $t->paymentInfo->zip_code ?? 'N/A' }}     
+                        </td>
+
                         
                         <td class="total">${{ number_format($t->paymentInfo->total_amount ?? 0, 2) }}</td>
                         
